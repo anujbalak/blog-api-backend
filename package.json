@@ -1,0 +1,33 @@
+{
+  "name": "blog-api-backend",
+  "version": "1.0.0",
+  "description": "Backend for Blog API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "watch": "node --watch src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anujbalak/blog-api-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/anujbalak/blog-api-backend/issues"
+  },
+  "homepage": "https://github.com/anujbalak/blog-api-backend#readme",
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1"
+  },
+  "devDependencies": {
+    "prisma": "^6.8.2"
+  }
+}
