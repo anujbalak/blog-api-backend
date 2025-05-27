@@ -33,8 +33,8 @@ export const postNewComment = async (req, res) => {
     try {
         const {id} = req.params;
         const { text } = req.body
-
-        await addComment(text, req.user.id, id);
+        
+        //await addComment(text, req.user.id, id);
         res.json({message: 'Commented'})
     } catch (error) {
         throw new Error(error);       

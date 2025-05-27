@@ -34,7 +34,15 @@ export const getUserByEmail = async (email) => {
             email,
         }
     });
-    console.log(user)
+    return user; 
+}
+
+export const getUserByUsername = async (username) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            username,
+        }
+    });
     return user; 
 }
 
@@ -108,5 +116,10 @@ export const newPost = async (text, title, authorid) => {
         },
     });
 };
+
+const sessionUser = async () => {
+    const user = await prisma.session.findMany();
+    console.log(user)
+}
 
 getUserByEmail('fake@mail.com')

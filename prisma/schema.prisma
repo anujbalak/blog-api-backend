@@ -47,6 +47,13 @@ model User {
   Comment Comment[]
 }
 
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   
+  expiresAt   DateTime
+}
+
 enum Role {
   USER
   ADMIN
