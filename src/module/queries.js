@@ -4,7 +4,6 @@ const prisma = new PrismaClient()
 
 export const getAllPosts = async () => {
     const posts = await prisma.post.findMany();
-    console.log(posts)
     return posts
 }
 
@@ -17,6 +16,7 @@ export const getPost = async (id) => {
             Comment: true,
         },
     });
+    return post;
 };
 
 export const getUser = async (id) => {
@@ -27,6 +27,23 @@ export const getUser = async (id) => {
     });
     return user;
 };
+
+export const getAuthor = async (id) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            id,
+            role: 'ADMIN'
+        },
+        select: {
+            id: true,
+            username: true,
+            email: true
+        }
+    });
+    console.log(id)
+    return user;
+};
+
 
 export const getUserByEmail = async (email) => {
     const user = await prisma.user.findFirst({
@@ -96,6 +113,7 @@ export const getAllComments = async (postId) => {
             postId
         },
     });
+    return comments
 }
 
 export const getComment = async (postId, id) => {
@@ -105,6 +123,7 @@ export const getComment = async (postId, id) => {
             postId,
         },
     });
+    return comments
 };
 
 export const newPost = async (text, title, authorid) => {

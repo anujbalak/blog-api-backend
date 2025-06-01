@@ -36,9 +36,8 @@ export const signupUser = [
 
             const result = validationResult(req)
             if (!result.isEmpty()) {
-                return res.json(result.array());
+                return res.status(400).json(result.array());
             }
-            console.log(username);
             const hashedPW = await bcrypt.hash(password, 10);
             await addUser(username, email, hashedPW)
             res.json({message: 'Success'})

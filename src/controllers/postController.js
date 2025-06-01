@@ -9,22 +9,21 @@ export const getAllPostsInfo = async (req, res) => {
         }
         res.json(posts)
     } catch (error) {
-        throw new Error
+        throw new Error(error)
     }
 }
 
 export const getPostInfo = async (req, res) => {
     try {
         const {id} = req.params;
-        
-        const post = getPost(id)
+        const post = await getPost(id);
 
         if (!post) {
             return res.json({message: 'No post'})
         }
         res.json(post);
     } catch (error) {
-        
+        console.log(error.message)
     }
 }
 
