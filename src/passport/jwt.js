@@ -8,7 +8,6 @@ const ExtractJWT = jwtPassport.ExtractJwt;
 let opts = {};
 opts.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_SECRET;
-
 export const jwt = new JWTStrategy(opts, async(payload, done) => {
     try {
         const user = await getUser(payload.id)

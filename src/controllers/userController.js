@@ -1,10 +1,10 @@
-import { addUser, getUser, updateUser } from "../module/queries.js";
+import { addUser, getUser, getUserForClient, updateUser } from "../module/queries.js";
 import bcrypt from 'bcryptjs'
 
 export const getUserInfo = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await getUser(id);
+        const user = await getUserForClient(id);
         res.json(user);
     } catch (error) {
         throw new Error(error)

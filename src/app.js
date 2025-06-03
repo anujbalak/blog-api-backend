@@ -15,6 +15,7 @@ import loginRouter from './routes/loginRouter.js';
 import userRouter from './routes/userRouter.js';
 import authorRouter from './routes/authorRouter.js';
 import { refreshSite } from './module/refresh.js';
+import commentRouter from './routes/commentRouter.js';
 
 const app = express();
 app.use(cookieParser());
@@ -41,6 +42,7 @@ app.use('/posts', postRouter);
 app.use('/users', userRouter);
 app.use('/author', authorRouter);
 app.use('/signup', signupRouter)
+app.use('/comments', commentRouter);
 app.post('/refresh', refreshSite);
 
 passport.use(jwt);

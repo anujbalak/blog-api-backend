@@ -3,7 +3,16 @@ import { PrismaClient } from "../../generated/prisma/index.js";
 const prisma = new PrismaClient()
 
 export const getAllPosts = async () => {
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany({
+        include: {
+            Comment: {
+                include: {
+                    user: true,
+                    post: true,
+                }
+            },
+        },
+    });
     return posts
 }
 
@@ -28,6 +37,21 @@ export const getUser = async (id) => {
     return user;
 };
 
+export const getUserForClient = async (id) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            id,
+        },
+        select: {
+            id: true, 
+            username: true,
+            email: true,
+            role:true,
+        }
+    });
+    return user;
+};
+
 export const getAuthor = async (id) => {
     const user = await prisma.user.findFirst({
         where: {
@@ -40,7 +64,6 @@ export const getAuthor = async (id) => {
             email: true
         }
     });
-    console.log(id)
     return user;
 };
 
@@ -103,6 +126,14 @@ export const addComment = async (text, userid, postId) => {
             text,
             userid,
             postId,
+        },
+    });
+};
+
+export const deleteCommentFromDb = async (id) => {
+    await prisma.comment.delete({
+        where: {
+            id,
         },
     });
 };

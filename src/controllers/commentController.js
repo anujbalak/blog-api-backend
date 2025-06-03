@@ -1,4 +1,5 @@
-import { addComment, getAllComments, getComment } from "../module/queries.js"
+import { validationResult } from "express-validator";
+import { addComment, deleteCommentFromDb, getAllComments, getComment } from "../module/queries.js"
 
 export const getAllCommentsInfo = async (req, res) => {
     try {
@@ -31,12 +32,35 @@ export const getCommentInfo = async (req, res) => {
 
 export const postNewComment = async (req, res) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json(errors.array());
+        }
+
         const {id} = req.params;
-        const { text } = req.body
+        const { comment } = req.body
+
+        console.log(comment)
+        if (!req.user) {
+            return res.json({message: 'Sign in again!'})
+        }
         
-        //await addComment(text, req.user.id, id);
+        const userid = req.user.id;
+
+        await addComment(comment, userid, id);
+
         res.json({message: 'Commented'})
     } catch (error) {
         throw new Error(error);       
+    }
+}
+
+export const deleteComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await deleteCommentFromDb(id);
+        res.json({messages: 'Comment removed'})
+    } catch (error) {
+        console.error(error);
     }
 }

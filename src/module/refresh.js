@@ -12,7 +12,13 @@ export const refreshSite = async (req, res) => {
             }
             user = decoded;
         })
-        res.status(200).json(user)
+
+        const accessToken = jwt.sign(user, process.env.JWT_SECRET)
+
+        res.status(200).json({
+            user,
+            accessToken
+        })
     } else {
         return res.status(406).json({message: 'Unauthorized'});
     }

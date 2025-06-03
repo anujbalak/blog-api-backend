@@ -6,10 +6,10 @@ import {body, validationResult} from 'express-validator';
 import { getAllPostsInfo, getPostInfo, makeNewPost } from '../controllers/postController.js';
 import { getAllCommentsInfo, getCommentInfo, postNewComment } from '../controllers/commentController.js';
 
-const commentValidationChain = 
+const commentValidationChain = () =>
     body('comment').trim()
     .isString().withMessage('Comment with string type only')
-    .isLength({max: 500, min: 1}).withMessage('Comment length should be between 1 to 500 letters');
+    .isLength({max: 500, min: 1}).withMessage('Comment length should be between 1 to 500 letters')
 
 const postValidation = [
     body('title').trim()
@@ -25,6 +25,6 @@ postRouter.get('/:id', getPostInfo);
 postRouter.post('/',postValidation, makeNewPost);
 postRouter.get('/:id/comments', getAllCommentsInfo)
 postRouter.get('/:id/comments/:commentId', getCommentInfo)
-postRouter.post('/:id/comments', commentValidationChain, passport.authenticate('jwt', {session: false}), postNewComment);
+postRouter.post('/:id/comments', commentValidationChain(), passport.authenticate('jwt', {session: false}), postNewComment);
 
 export default postRouter
