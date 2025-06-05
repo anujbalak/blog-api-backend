@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { addComment, deleteCommentFromDb, getAllComments, getComment } from "../module/queries.js"
+import { addComment, deleteCommentFromDb, editCommentOnDb, getAllComments, getComment } from "../module/queries.js"
 
 export const getAllCommentsInfo = async (req, res) => {
     try {
@@ -40,7 +40,6 @@ export const postNewComment = async (req, res) => {
         const {id} = req.params;
         const { comment } = req.body
 
-        console.log(comment)
         if (!req.user) {
             return res.json({message: 'Sign in again!'})
         }
@@ -62,5 +61,22 @@ export const deleteComment = async (req, res) => {
         res.json({messages: 'Comment removed'})
     } catch (error) {
         console.error(error);
+    }
+}
+
+export const editComment = async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        const {id} = req.params;
+        const { comment } = req.body
+        if (!errors.isEmpty()) {
+            return res.status(400).json(errors.array());
+        }
+        
+        await editCommentOnDb(id, comment);
+
+        res.json({message: 'Edited'})
+    } catch (error) {
+        throw new Error(error);       
     }
 }

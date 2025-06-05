@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import 'dotenv/config';
+import { getUser } from './queries.js';
 
 export const refreshSite = async (req, res) => {
     if (req.headers?.authorization) {
@@ -13,10 +14,22 @@ export const refreshSite = async (req, res) => {
             user = decoded;
         })
 
-        const accessToken = jwt.sign(user, process.env.JWT_SECRET)
+        let userData = null;
+        if (user) {
+            userData = await getUser(user.id);
+        }
+
+        let payload = {
+            id: userData.id,
+            username: userData.username,
+            email: userData.email,
+            role: userData.role
+        }
+        
+        const accessToken = jwt.sign(payload, process.env.JWT_SECRET)
 
         res.status(200).json({
-            user,
+            user: payload,
             accessToken
         })
     } else {

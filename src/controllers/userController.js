@@ -1,4 +1,5 @@
-import { addUser, getUser, getUserForClient, updateUser } from "../module/queries.js";
+import { validationResult } from "express-validator";
+import { addUser, getUser, getUserForClient, updateEmail, updatePassword, updateUsername } from "../module/queries.js";
 import bcrypt from 'bcryptjs'
 
 export const getUserInfo = async (req, res) => {
@@ -13,12 +14,30 @@ export const getUserInfo = async (req, res) => {
 
 export const putUserInfo = async (req, res) => {
     try {
+        const errors = validationResult(req)
+
+        // if (!errors.isEmpty()) {
+        //     return res.status(400).json(errors.array());
+        // }
+
         const {username, email, password} = req.body;
         const {id} = req.params;
+        console.log(username)
+        if (username) {
+            await updateUsername({id, username})
+            return res.json({message: 'Updated'})
+        }
 
-        const hashedPW = await bcrypt.hash(password, 10);
-        await updateUser({id, username, email, password})
-        res.json({message: 'Success'})
+        if (email) {
+            await updateEmail({id , email})
+            return res.json({message: 'Updated'})
+        }
+
+        if (password) {
+            const hashedPW = await bcrypt.hash(password, 10);
+            await updatePassword({id, hashedPW})
+        }
+        return;
     } catch (error) {
         throw new Error(error);
     }

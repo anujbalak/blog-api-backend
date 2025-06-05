@@ -107,18 +107,38 @@ export const addAdmin = async (username, email, password) => {
     });
 };
 
-export const updateUser = async ({id, username, email, password}) => {
+export const updateUsername = async ({id, username}) => {
+    await prisma.user.update({
+        where: {
+            id,
+        },
+        data: {
+            username,
+        }
+    })
+}
+
+export const updateEmail = async ({id, email}) => {
     await prisma.user.update({
         where: {
             id,
         },
         data: {
             email,
-            password,
-            username
         }
     })
 }
+
+export const updatePassword = async ({id, password}) => {
+    await prisma.user.update({
+        where: {
+            id,
+        },
+        data: {
+            password,
+        },
+    })
+};
 
 export const addComment = async (text, userid, postId) => {
     await prisma.comment.create({
@@ -136,6 +156,18 @@ export const deleteCommentFromDb = async (id) => {
             id,
         },
     });
+};
+
+export const editCommentOnDb = async (id, text) => {
+    const comment = await prisma.comment.update({
+        where: {
+            id,
+        },
+        data: {
+            text,
+        },
+    });
+    console.log(comment)
 };
 
 export const getAllComments = async (postId) => {
@@ -171,5 +203,3 @@ const sessionUser = async () => {
     const user = await prisma.session.findMany();
     console.log(user)
 }
-
-getUserByEmail('fake@mail.com')
