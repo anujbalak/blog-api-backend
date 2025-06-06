@@ -3,9 +3,46 @@ import jwt from 'jsonwebtoken'
 import { getUserByUsername } from '../module/queries.js';
 import 'dotenv/config'
 
-export const loginUser = () => passport.authenticate('local')
+export const loginUser = async (req, res, next) => {
+    
+    passport.authenticate('local', {session: false}, (err, user, info) => {
+        console.log(err);
+        if (err || !user) {
+            return res.status(400).json({
+                message: info ? info.message : 'Login failed',
+                user   : user
+            });
+        }
 
-export const login = async (req, res) => {
+        req.login(user, {session: false}, (err) => {
+            if (err) {
+                res.send(err);
+            }
+        });
+
+        const payload = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role
+        }
+        const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '15m'})
+
+        const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
+            expiresIn: '1d'
+        })
+
+        res.status(200).json({
+            message: 'Auth passed',
+            user: payload,
+            accessToken,
+            refreshToken
+        })
+    })
+    (req, res);
+}
+
+export const login = async (req, res, next) => {
     try {
         const { username, password } = req.body;
         if (!username  || !password) {
@@ -34,7 +71,8 @@ export const login = async (req, res) => {
         //     maxAge: 1000 * 60 * 60 * 24,
         // })
         
-        return res.status(200).json({
+        res.clearCookie('connect.sid')
+        res.status(200).json({
             message: 'Auth passed',
             user: payload,
             accessToken,

@@ -16,6 +16,7 @@ import userRouter from './routes/userRouter.js';
 import authorRouter from './routes/authorRouter.js';
 import { refreshSite } from './module/refresh.js';
 import commentRouter from './routes/commentRouter.js';
+import logoutRouter from './routes/logoutRouter.js';
 
 const app = express();
 app.use(cookieParser());
@@ -44,9 +45,10 @@ app.use('/author', authorRouter);
 app.use('/signup', signupRouter)
 app.use('/comments', commentRouter);
 app.post('/refresh', refreshSite);
+app.use('/logout', logoutRouter);
 
-passport.use(jwt);
 passport.use(local)
+passport.use(jwt);
 serializeUser
 deserializeUser
 

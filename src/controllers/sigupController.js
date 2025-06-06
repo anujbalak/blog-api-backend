@@ -1,29 +1,38 @@
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
-import { addUser } from "../module/queries.js";
+import { addUser, getUserByEmail, getUserByUsername } from "../module/queries.js";
 
 
-const usernameValidationChain = 
+export const usernameValidationChain = 
     body('username').trim()
         .isAlphanumeric().withMessage('Use alphabet charaters or combination of alphabets and numbers')
-        .isLength({max: 20, min: 3}).withMessage('Username length should be between 3 to 20 characters');
-
-const emailValidationChain = 
+        .isLength({max: 20, min: 3}).withMessage('Username length should be between 3 to 20 characters')
+        .custom( async (value) => {
+            const user = await getUserByUsername(value)
+            if (user && user.username === value) {
+                throw new Error('Username is already taken')
+            }
+        })
+        
+export const emailValidationChain = 
     body('email').trim()
         .isEmail().withMessage('Enter an email only')
-        // .custom((value, { req }) => {
+        .custom( async (value) => {
+            const user = await getUserByEmail(value)
+            if (user && user.email === value) {
+                throw new Error('Email is already in use')
+            }
+        })
 
-        // });
-
-const passwordValidationChain = 
+export const passwordValidationChain = 
     body('password').trim()
         .isStrongPassword().withMessage('Enter a password with combination of characters, symbles and numbers')
 
-const confirmPasswordValicationChain =  
+export const confirmPasswordValicationChain =  
     body('confirmPassword').trim()
-        .custom((value, {req}) => {
+    .custom((value, {req}) => {
         return value === req.body.password;
-        }).withMessage('Password is not matching');
+    }).withMessage('Password is not matching');
 
 export const signupUser = [
     usernameValidationChain,
