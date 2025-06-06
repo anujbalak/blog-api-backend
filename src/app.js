@@ -25,6 +25,14 @@ app.use(express.json());
 app.use(session)
 app.use(cors({credentials: true}));
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+})
+
 app.use((req, res, next) => { 
     if (req.user) {
         console.log(req.user)
@@ -32,10 +40,6 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-})
 
 app.use('/', indexRouter)
 app.use('/login', loginRouter)

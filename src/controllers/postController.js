@@ -30,11 +30,14 @@ export const getPostInfo = async (req, res) => {
 export const makeNewPost = async (req, res) => {
     try {
         const result = validationResult(req)
+        console.log('from post controller', req.body)
         if(!result.isEmpty()) {
             return res.json(result.array())
         }
         const { text, title} = req.body;
-        await newPost(text, title, '9233fc67-8c37-4095-a15b-918470af9e12')
+        const user = req.user
+
+        await newPost(text, title, user.id)
         res.json({mssage: 'Success'})
     } catch (error) {
         throw new Error(error);

@@ -22,7 +22,7 @@ const postRouter = Router();
 
 postRouter.get('/', getAllPostsInfo);
 postRouter.get('/:id', getPostInfo);
-postRouter.post('/',postValidation, makeNewPost);
+postRouter.post('/new',postValidation, passport.authenticate('jwt', {session: false}), makeNewPost);
 postRouter.get('/:id/comments', getAllCommentsInfo)
 postRouter.get('/:id/comments/:commentId', getCommentInfo)
 postRouter.post('/:id/comments', commentValidationChain(), passport.authenticate('jwt', {session: false}), postNewComment);
