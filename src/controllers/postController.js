@@ -1,4 +1,4 @@
-import { getAllPosts, getPost, newPost } from "../module/queries.js"
+import { getAllPosts, getPost, newPost, updatePost, updatePublish, deletePost } from "../module/queries.js"
 import { validationResult } from "express-validator";
 
 export const getAllPostsInfo = async (req, res) => {
@@ -30,7 +30,6 @@ export const getPostInfo = async (req, res) => {
 export const makeNewPost = async (req, res) => {
     try {
         const result = validationResult(req)
-        console.log('from post controller', req.body)
         if(!result.isEmpty()) {
             return res.json(result.array())
         }
@@ -41,5 +40,38 @@ export const makeNewPost = async (req, res) => {
         res.json({mssage: 'Success'})
     } catch (error) {
         throw new Error(error);
+    }
+}
+
+export const editPost = async (req, res) => {
+    try {
+        const result = validationResult(req)
+        if(!result.isEmpty()) {
+            return res.json(result.array())
+        }
+        const { text, title, publish} = req.body;
+        const {id} = req.params;
+        if (publish !== undefined) {
+            console.log(publish)
+            await updatePublish(id, publish)
+            res.json({mssage: 'Published'})
+            return;    
+        }
+
+        await updatePost(id, title, text)
+        res.json({mssage: 'Updated'})
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export const deletPostInfo = async (req, res) => {
+    try {
+        const {id} = req.params;
+        await deletePost(id);
+
+        res.json({message: 'deleted'});
+    } catch (error) {
+        console.error(error.message)
     }
 }

@@ -28,6 +28,17 @@ export const getPost = async (id) => {
     return post;
 };
 
+export const deletePost = async (id) => {
+    await prisma.post.delete({
+        where: {
+            id,
+        },
+        include: {
+            Comment: true,
+        },
+    })
+};
+
 export const getUser = async (id) => {
     const user = await prisma.user.findFirst({
         where: {
@@ -196,6 +207,29 @@ export const newPost = async (text, title, authorid) => {
             text,
             title,
             authorid,
+        },
+    });
+};
+
+export const updatePost = async (id, title, text) => {
+    await prisma.post.update({
+        where: {
+            id,
+        },
+        data: {
+            text,
+            title,
+        },
+    });
+};
+
+export const updatePublish = async (id, published) => {
+    await prisma.post.update({
+        where: {
+            id,
+        },
+        data: {
+            published
         },
     });
 };
