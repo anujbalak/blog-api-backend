@@ -10,6 +10,7 @@ export const loginUser = async (req, res, next) => {
         if (err || !user) {
             return res.status(400).json({
                 message: info ? info.message : 'Login failed',
+                type: 'error',
                 user   : user
             });
         }
@@ -33,7 +34,8 @@ export const loginUser = async (req, res, next) => {
         })
 
         res.status(200).json({
-            message: 'Auth passed',
+            message: 'Logged In',
+            type: 'success',
             user: payload,
             accessToken,
             refreshToken
@@ -73,7 +75,7 @@ export const login = async (req, res, next) => {
         
         res.clearCookie('connect.sid')
         res.status(200).json({
-            message: 'Auth passed',
+            message: 'Logged In',
             user: payload,
             accessToken,
             refreshToken

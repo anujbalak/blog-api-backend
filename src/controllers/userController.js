@@ -26,7 +26,7 @@ export const putPassword = async (req, res) => {
         const hashedPW = await bcrypt.hash(password, 10);
         await updatePassword({id, password: hashedPW });
         
-        return res.status(200).json({message: 'Password updated'})
+        return res.status(200).json({message: 'Password updated', type: 'success'})
     } catch (error) {
         throw new Error(error);
     }
@@ -43,7 +43,7 @@ export const putUsername = async (req, res) => {
         const {id} = req.params;
 
         updateUsername({id, username})
-        res.json({message: 'Updated'})
+        res.json({message: 'Updated', type: 'success'})
     } catch (error) {
         throw new Error(error);
     }
@@ -61,7 +61,7 @@ export const putEmail = async (req, res) => {
         const {id} = req.params;
         
         await updateEmail({id , email})
-        return res.json({message: 'Updated'})
+        return res.json({message: 'Updated', type: 'success'})
 
     } catch (error) {
         throw new Error(error);

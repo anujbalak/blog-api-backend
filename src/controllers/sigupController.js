@@ -49,7 +49,7 @@ export const signupUser = [
             }
             const hashedPW = await bcrypt.hash(password, 10);
             await addUser(username, email, hashedPW)
-            res.json({message: 'Success'})
+            res.json({message: 'Account Created Successfully', type: 'success'})
         } catch (error) {
             console.error(error)
         }

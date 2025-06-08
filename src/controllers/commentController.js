@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import { addComment, deleteCommentFromDb, editCommentOnDb, getAllComments, getComment } from "../module/queries.js"
+import { messageOnNtfy } from "../module/ntfy.js";
 
 export const getAllCommentsInfo = async (req, res) => {
     try {
@@ -47,8 +48,9 @@ export const postNewComment = async (req, res) => {
         const userid = req.user.id;
 
         await addComment(comment, userid, id);
-
-        res.json({message: 'Commented'})
+        //await messageOnNtfy(comment);
+        
+        res.json({message: 'Commented', type: 'info'})
     } catch (error) {
         throw new Error(error);       
     }
@@ -58,7 +60,7 @@ export const deleteComment = async (req, res) => {
     try {
         const { id } = req.params;
         await deleteCommentFromDb(id);
-        res.json({messages: 'Comment removed'})
+        res.json({message: 'Comment removed', type: 'info'})
     } catch (error) {
         console.error(error);
     }
@@ -75,7 +77,7 @@ export const editComment = async (req, res) => {
         
         await editCommentOnDb(id, comment);
 
-        res.json({message: 'Edited'})
+        res.json({message: 'Edited', type: 'success'})
     } catch (error) {
         throw new Error(error);       
     }

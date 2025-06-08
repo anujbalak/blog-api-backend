@@ -16,6 +16,23 @@ export const getAllPosts = async () => {
     return posts
 }
 
+export const getPostsForUser = async () => {
+    const posts = await prisma.post.findMany({
+        where: {
+            published: true
+        },
+        include: {
+            Comment: {
+                include: {
+                    user: true,
+                    post: true,
+                }
+            },
+        },
+    });
+    return posts
+}
+
 export const getPost = async (id) => {
     const post = await prisma.post.findFirst({
         where: {
@@ -67,7 +84,7 @@ export const getAuthor = async (id) => {
     const user = await prisma.user.findFirst({
         where: {
             id,
-            role: 'ADMIN'
+            // role: 'ADMIN'
         },
         select: {
             id: true,
