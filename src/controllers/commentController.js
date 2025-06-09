@@ -35,7 +35,8 @@ export const postNewComment = async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json(errors.array());
+            const response = {errors: errors.array(), type: 'warn'}
+            return res.status(400).json(response);
         }
 
         const {id} = req.params;

@@ -45,7 +45,8 @@ export const signupUser = [
 
             const result = validationResult(req)
             if (!result.isEmpty()) {
-                return res.status(400).json(result.array());
+                const response = {errors: result.array(), type: 'warn'}
+                return res.status(400).json(response);
             }
             const hashedPW = await bcrypt.hash(password, 10);
             await addUser(username, email, hashedPW)

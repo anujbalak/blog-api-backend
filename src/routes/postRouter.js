@@ -3,7 +3,7 @@ import passport from 'passport';
 
 import {body, validationResult} from 'express-validator';
 
-import { deletPostInfo, editPost, getAllPostsInfo, getPostInfo, makeNewPost } from '../controllers/postController.js';
+import { deletPostInfo, editPost, getAllPostsForAuthor, getAllPostsInfo, getPostInfo, makeNewPost } from '../controllers/postController.js';
 import { getAllCommentsInfo, getCommentInfo, postNewComment } from '../controllers/commentController.js';
 
 export const commentValidationChain = () =>
@@ -21,6 +21,7 @@ const postValidation = [
 const postRouter = Router();
 
 postRouter.get('/', getAllPostsInfo);
+postRouter.get('/author', getAllPostsForAuthor)
 postRouter.get('/:id', getPostInfo);
 postRouter.post('/new',postValidation, passport.authenticate('jwt', {session: false}), makeNewPost);
 postRouter.put('/:id',postValidation, passport.authenticate('jwt', {session: false}), editPost);
