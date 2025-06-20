@@ -41,8 +41,8 @@ app.use((req, res, next) => {
 })
 
 
-app.use('/', indexRouter)
-app.use('/login', loginRouter)
+app.use('/', indexRouter);
+app.use('/login', loginRouter);
 app.use('/posts', postRouter);
 app.use('/users', userRouter);
 app.use('/author', authorRouter);
